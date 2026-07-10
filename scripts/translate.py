@@ -4,8 +4,10 @@ translate.py — 使用 DeepSeek API 将蓝贴英文原文翻译为中文。
 import logging
 import os
 import time
+import traceback
 from typing import Optional
 
+import httpx
 from openai import OpenAI
 
 logger = logging.getLogger(__name__)
@@ -59,10 +61,18 @@ def _get_client() -> Optional[OpenAI]:
     if not DEEPSEEK_API_KEY:
         logger.error("未设置 DEEPSEEK_API_KEY 环境变量")
         return None
+
+    # 自定义 httpx 客户端，兼容 GitHub Actions 网络环境
+    http_client = httpx.Client(
+        timeout=httpx.Timeout(60.0, connect=15.0),
+        limits=httpx.Limits(max_keepalive_connections=5, max_connections=10),
+        follow_redirects=True,
+    )
+
     return OpenAI(
         api_key=DEEPSEEK_API_KEY,
         base_url=DEEPSEEK_BASE_URL,
-        timeout=60.0,  # 60秒超时
+        http_client=http_client,
         max_retries=2,
     )
 
@@ -110,7 +120,9 @@ def translate_text(title: str, content: str) -> str:
                 logger.warning("翻译返回空内容，重试 %d/3", attempt + 1)
 
         except Exception as e:
-            logger.warning("翻译出错 (尝试 %d/3): %s", attempt + 1, e)
+            logger.warning("翻译出错 (尝试 %d/3): %s: %s", attempt + 1, type(e).__name__, e)
+            # 记录详细错误信息用于调试
+            logger.debug("详细堆栈:\n%s", traceback.format_exc())
             if attempt < 2:
                 time.sleep((attempt + 1) * 3)  # 递增等待
 

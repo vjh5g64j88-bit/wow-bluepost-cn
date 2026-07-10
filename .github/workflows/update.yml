@@ -29,6 +29,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Test DeepSeek API connectivity
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          python -c "
+          import httpx, os
+          key = os.environ.get('DEEPSEEK_API_KEY', '')
+          print(f'API Key loaded: {bool(key)} (length={len(key)})')
+          try:
+              r = httpx.get('https://api.deepseek.com/v1/models', headers={'Authorization': f'Bearer {key}'}, timeout=15.0)
+              print(f'Status: {r.status_code}')
+              if r.status_code == 200:
+                  print('API reachable!')
+              else:
+                  print(f'Response: {r.text[:200]}')
+          except Exception as e:
+              print(f'Connection failed: {type(e).__name__}: {e}')
+          "
+
       - name: Run update script
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
