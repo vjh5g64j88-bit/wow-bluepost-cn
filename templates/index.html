@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔兽世界正式服蓝贴 - 中文翻译</title>
+<style>
+:root {
+    --bg: #0d1117;
+    --card-bg: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --gold: #f0c040;
+    --wow-blue: #0078ff;
+    --tag-bg: #1a2332;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #111d32 50%, #0d1520 100%);
+    border-bottom: 3px solid var(--wow-blue);
+    padding: 40px 20px 30px;
+    text-align: center;
+}
+
+.header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header h1 {
+    font-size: 2em;
+    color: var(--gold);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.header .subtitle {
+    color: var(--muted);
+    font-size: 0.95em;
+}
+
+.header .meta-info {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 0.85em;
+    color: var(--muted);
+}
+
+.header .meta-info span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Container ── */
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+}
+
+/* ── Post List ── */
+.update-time {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82em;
+    margin-bottom: 20px;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.15s;
+    display: block;
+}
+
+.post-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.post-card .post-title {
+    font-size: 1.15em;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.post-card .post-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.82em;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.post-card .post-meta .author {
+    color: var(--gold);
+}
+
+.post-card .post-summary {
+    font-size: 0.92em;
+    color: #b0b8c0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ── Empty State ── */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+}
+
+.empty-state .icon {
+    font-size: 3em;
+    margin-bottom: 16px;
+}
+
+/* ── Footer ── */
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 0.78em;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+}
+
+.footer a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.4em; }
+    .post-card { padding: 16px; }
+    .post-card .post-title { font-size: 1.05em; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <h1>⚔️ 魔兽世界正式服蓝贴</h1>
+        <p class="subtitle">Wowhead Blue Tracker · 中文翻译 · 每2小时自动更新</p>
+        <div class="meta-info">
+            <span>📋 共 {{ total_posts }} 篇蓝贴</span>
+            <span>🕐 更新于 {{ update_time }}</span>
+            <span>🔗 来源: <a href="https://www.wowhead.com/blue-tracker" style="color:var(--accent);">Wowhead</a></span>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <p class="update-time">最近更新: {{ update_time }} | 仅包含正式服（零售）蓝贴</p>
+
+    {% if posts %}
+    <div class="post-list">
+        {% for post in posts %}
+        <a class="post-card" href="posts/{{ post.slug }}.html">
+            <div class="post-title">{{ post.translated_title }}</div>
+            <div class="post-meta">
+                <span>📅 {{ post.pub_date }}</span>
+                <span class="author">👤 {{ post.author }}</span>
+            </div>
+            <div class="post-summary">{{ post.summary }}</div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="icon">📭</div>
+        <p>暂未抓取到蓝贴</p>
+        <p style="margin-top:8px;">请稍后再来，或手动触发更新</p>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        <p>本站内容来源于 <a href="https://www.wowhead.com/blue-tracker">Wowhead Blue Tracker</a>，翻译仅供参考。</p>
+        <p>World of Warcraft &copy; Blizzard Entertainment. 本站为非官方粉丝翻译站。</p>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+name: Update Blue Posts
+
+on:
+  schedule:
+    # 每 2 小时触发（UTC 时间，偶数整点）
+    - cron: '0 */2 * * *'
+  workflow_dispatch: {}  # 允许手动触发
+
+# 确保同一时间只有一个实例在运行
+concurrency:
+  group: bluepost-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run update script
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: python scripts/main.py
+
+      - name: Deploy to Cloudflare Pages
+        if: success()
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: wow-bluepost-cn
+          directory: output
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ translated_title }} - 魔兽世界蓝贴中文翻译</title>
+<style>
+:root {
+    --bg: #0d1117;
+    --card-bg: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --gold: #f0c040;
+    --wow-blue: #0078ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.85;
+    min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #111d32 50%, #0d1520 100%);
+    border-bottom: 2px solid var(--wow-blue);
+    padding: 24px 20px;
+    text-align: center;
+}
+
+.header a {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.header a:hover { text-decoration: underline; }
+
+/* ── Article ── */
+.article-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+}
+
+.article-header {
+    margin-bottom: 28px;
+}
+
+.article-header h1 {
+    font-size: 1.6em;
+    color: var(--accent);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.article-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.85em;
+    color: var(--muted);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.article-meta .author {
+    color: var(--gold);
+}
+
+.article-meta a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.article-meta a:hover { text-decoration: underline; }
+
+/* ── Content ── */
+.article-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    font-size: 0.98em;
+    line-height: 1.85;
+}
+
+.article-content p {
+    margin-bottom: 1em;
+}
+
+.article-content h2, .article-content h3 {
+    color: var(--gold);
+    margin: 1.2em 0 0.6em;
+    font-size: 1.1em;
+}
+
+.article-content ul, .article-content ol {
+    margin: 0.6em 0 1em 1.5em;
+}
+
+.article-content li {
+    margin-bottom: 0.4em;
+}
+
+.article-content strong {
+    color: #f0c040;
+}
+
+/* ── Footer ── */
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 0.78em;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .article-header h1 { font-size: 1.25em; }
+    .article-content { padding: 16px; font-size: 0.92em; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <a href="../index.html">← 返回蓝贴列表</a>
+</div>
+
+<div class="article-container">
+    <div class="article-header">
+        <h1>{{ translated_title }}</h1>
+        <div class="article-meta">
+            <span>📅 {{ pub_date }}</span>
+            <span class="author">👤 {{ author }}</span>
+            <span>🔗 <a href="{{ original_link }}" target="_blank" rel="noopener">查看原文</a></span>
+        </div>
+    </div>
+
+    <div class="article-content">
+        {{ content_html }}
+    </div>
+
+    <div class="footer">
+        <p>翻译仅供参考，原文链接: <a href="{{ original_link }}" target="_blank" rel="noopener">{{ original_link }}</a></p>
+    </div>
+</div>
+
+</body>
+</html>
