@@ -14,7 +14,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 # ── DeepSeek API 配置 ─────────────────────────────────
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
 DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
 DEEPSEEK_MODEL = "deepseek-chat"
 
